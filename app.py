@@ -63,7 +63,7 @@ if view_mode == "صفحة المشاركة":
 
         # 🔊 Distraction (sound only)
         if mode == "مع إزعاج":
-            st.audio("notification.mp3", autoplay=True)
+            st.audio("notification.mp3")
             time.sleep(0.4)
 
         q_text, options, correct = questions[st.session_state.q_index]
