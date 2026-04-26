@@ -60,7 +60,7 @@ if view_mode == "صفحة المشاركة":
             st.session_state.q_index = 0
     else:
         st.info("⏱️ الوقت يعمل")
-
+        
         # 🔊 Distraction (sound only)
         if mode == "مع إزعاج":
             st.audio("notification.mp3")
