@@ -135,11 +135,3 @@ if view_mode == "عرض النتائج (للبروجكتور)":
     else:
         st.info("Waiting for participants...")
 
-
-# زر تشغيل الصوت (تفاعل مباشر)
-if mode == "مع إزعاج":
-    st.markdown("### تشغيل الإزعاج")
-    play_sound = st.button("🔊 تشغيل الإشعار")
-
-    if play_sound:
-        st.audio("notification.mp3")
