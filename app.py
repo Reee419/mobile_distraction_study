@@ -4,41 +4,39 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-# ========================
-# Data setup
-# ========================
+# =========================
+# إعداد ملف البيانات
+# =========================
 DATA_FILE = "data.csv"
 
 if not os.path.exists(DATA_FILE):
     pd.DataFrame(columns=["time", "mode"]).to_csv(DATA_FILE, index=False)
 
-# ========================
-# Title
-# ========================
+# =========================
+# العنوان
+# =========================
 st.title("تأثير استخدام الجوال على الإنتاجية")
 
-# ========================
-# View mode (Presentation / Participant)
-# ========================
+# =========================
+# وضع العرض
+# =========================
 view_mode = st.sidebar.radio(
     "وضع العرض:",
     ["صفحة المشاركة", "عرض النتائج (للبروجكتور)"]
 )
 
-# ========================
-# ========================
-# PARTICIPANT PAGE
-# ========================
-# ========================
+# =================================================
+# صفحة المشاركة
+# =================================================
 if view_mode == "صفحة المشاركة":
 
     st.markdown("""
     تعليمات التجربة:
     - اختر نوع التجربة
-    - اضغط (ابدأ) ليبدأ الوقت
-    - تتكون التجربة من 3 أسئلة
-    - إذا كانت الإجابة خاطئة سيعاد نفس السؤال
-    - الوقت يتوقف فقط بعد آخر إجابة صحيحة
+    - اضغطي (ابدأ) ليبدأ الوقت
+    - التجربة تتكون من 3 أسئلة
+    - الإجابة الخاطئة تعيد نفس السؤال
+    - الوقت يتوقف بعد آخر إجابة صحيحة
     """)
 
     mode = st.radio("نوع التجربة:", ["بدون إزعاج", "مع إزعاج"])
@@ -60,11 +58,10 @@ if view_mode == "صفحة المشاركة":
             st.session_state.q_index = 0
     else:
         st.info("⏱️ الوقت يعمل")
-        
-        # 🔊 Distraction (sound only)
+
+        # 🔊 الإزعاج الصوتي (محلي فقط – تلقائي)
         if mode == "مع إزعاج":
-            st.audio("notification.mp3")
-            time.sleep(0.4)
+            st.audio("notification.mp3", autoplay=True)
 
         q_text, options, correct = questions[st.session_state.q_index]
 
@@ -94,11 +91,9 @@ if view_mode == "صفحة المشاركة":
                     st.session_state.q_index = 0
                     st.rerun()
 
-# ========================
-# ========================
-# PROJECTOR VIEW (CHART ONLY)
-# ========================
-# ========================
+# =================================================
+# عرض النتائج (للبروجكتور)
+# =================================================
 if view_mode == "عرض النتائج (للبروجكتور)":
 
     st.subheader("📊 Live Results")
@@ -116,22 +111,13 @@ if view_mode == "عرض النتائج (للبروجكتور)":
         ]:
             subset = df[df["mode"] == label]["time"]
             if not subset.empty:
-                ax.hist(
-                    subset,
-                    bins=bins,
-                    alpha=0.65,
-                    label=label,
-                    color=color
-                )
+                ax.hist(subset, bins=bins, alpha=0.65, label=label, color=color)
 
-        # English labels (ONLY for chart)
         ax.set_xlabel("Completion Time (seconds)")
         ax.set_ylabel("Number of Participants")
         ax.set_title("Time Distribution: With vs Without Distraction")
         ax.legend()
 
         st.pyplot(fig)
-
     else:
-        st.info("Waiting for participants...")
-
+        st.info("بانتظار مشاركين...")
